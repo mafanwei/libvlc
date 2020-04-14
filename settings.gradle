@@ -1,0 +1,3 @@
+rootProject.name='libvlc'
+include ':app'
+include ':vlclibrary'
