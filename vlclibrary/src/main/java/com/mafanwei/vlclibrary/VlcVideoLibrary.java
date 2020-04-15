@@ -1,10 +1,12 @@
-package com.mafanwei.vlclibrary;
+package com.mafanwei.vlcLibrary;
 
 import org.videolan.libvlc.MediaPlayer;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.SurfaceTexture;
 import android.net.Uri;
+import android.util.DisplayMetrics;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -45,7 +47,7 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
         }
     }
 
-    public void setvlcVout() {
+    public void setVlcVout() {
         setVout();
     }
 
@@ -56,7 +58,7 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
     }
 
     public void startPlay() {
-        if(player !=null && player.hasMedia() && !player.isPlaying()) {
+        if (player != null && player.hasMedia() && !player.isPlaying()) {
             player.play();
         }
     }
@@ -68,7 +70,7 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
     }
 
     public void release() {
-        if(player != null) {
+        if (player != null) {
             player.release();
         }
     }
@@ -80,7 +82,7 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
     }
 
     public void resumePlay() {
-        if(player != null && player.hasMedia() && !player.isPlaying()) {
+        if (player != null && player.hasMedia() && !player.isPlaying()) {
             setVout();
             player.play();
         }
@@ -122,9 +124,10 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
         //media.addOption(":file-caching=" + Constants.BUFFER);
         media.setHWDecoderEnabled(true, false);
         player = new MediaPlayer(vlcInstance);
-        for(String option : options) {
+        for (String option : options) {
             media.addOption(option);
         }
+        player.setScale(0);
         player.setMedia(media);
         player.setEventListener(this);
         player.setVideoScale(scaleType);
@@ -133,19 +136,10 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
 
     @Override
     public void onEvent(MediaPlayer.Event event) {
-        switch (event.type) {
-            case MediaPlayer.Event.Playing:
-                vlcListener.onComplete();
-                break;
-            case MediaPlayer.Event.EncounteredError:
-                vlcListener.onError();
-                break;
-            case MediaPlayer.Event.Buffering:
-                vlcListener.onBuffering(event);
-                break;
-            default:
-                break;
+        if(vlcListener == null) {
+            return;
         }
+        vlcListener.OnVlcOccur(event);
     }
 
     public static class Builder {
@@ -153,9 +147,13 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
         public VlcVideoLibrary vlcVideoLibrary;
         private Context context;
 
-        public Builder(Context context) {
+        public Builder(Context context,boolean useDefaultOptions) {
             this.context = context;
             vlcVideoLibrary = new VlcVideoLibrary();
+            if(useDefaultOptions) {
+                addOption(":vout=android-display");
+                addOption(":rtsp-tcp");
+            }
         }
 
         public Builder setSurfaceView(SurfaceView surfaceView) {
@@ -218,12 +216,26 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
             return this;
         }
 
+        public Builder useFullScreen() {
+            vlcVideoLibrary.autoSize = false;
+            Resources resources = context.getResources();
+            //获取屏幕数据
+            DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+            //获取屏幕宽高，单位是像素
+            vlcVideoLibrary.width = displayMetrics.widthPixels;
+            vlcVideoLibrary.height = displayMetrics.heightPixels;
+            return this;
+        }
+
+        public Builder useNoCache() {
+            addOption(":network-caching=0");
+            addOption(":file-caching=0");
+            return this;
+        }
+
         public VlcVideoLibrary create() {
-            if (vlcVideoLibrary.vlcListener == null) {
-                throw new NullPointerException("vlcListener shouldn't be null");
-            }
-            if(vlcVideoLibrary.vlcInstance == null) {
-                    vlcVideoLibrary.vlcInstance = new LibVLC(context, new VlcOptions().getDefaultOptions());
+            if (vlcVideoLibrary.vlcInstance == null) {
+                vlcVideoLibrary.vlcInstance = new LibVLC(context);
             }
             context = null;
             return vlcVideoLibrary;

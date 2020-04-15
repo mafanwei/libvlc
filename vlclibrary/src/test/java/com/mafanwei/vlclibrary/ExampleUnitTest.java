@@ -1,4 +1,4 @@
-package com.mafanwei.vlclibrary;
+package com.mafanwei.vlcLibrary;
 
 import org.junit.Test;
 
