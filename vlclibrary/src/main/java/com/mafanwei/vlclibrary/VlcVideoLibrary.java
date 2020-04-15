@@ -152,7 +152,6 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
             vlcVideoLibrary = new VlcVideoLibrary();
             if(useDefaultOptions) {
                 addOption(":vout=android-display");
-                addOption(":rtsp-tcp");
             }
         }
 
@@ -227,9 +226,30 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
             return this;
         }
 
+        public Builder useRtspTcp() {
+             addOption(":rtsp-tcp");
+             return this;
+        }
+
+        public Builder removeOption(String option) {
+            if(vlcVideoLibrary.options == null || vlcVideoLibrary.options.isEmpty()) {
+                return this;
+            } else if (vlcVideoLibrary.options.contains(option)) {
+                vlcVideoLibrary.options.remove(option);
+            }
+            return this;
+        }
+
+        public Builder clearOptions() {
+            vlcVideoLibrary.options.clear();
+            return this;
+        }
+
         public Builder useNoCache() {
             addOption(":network-caching=0");
             addOption(":file-caching=0");
+            addOption(":live-caching=0");
+            addOption(":sout-mux-caching=0");
             return this;
         }
 

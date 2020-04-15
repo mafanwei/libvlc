@@ -24,11 +24,12 @@ public class MainActivity extends Activity {
         surfaceView = findViewById(R.id.sv);
         VlcVideoLibrary.Builder builder = new VlcVideoLibrary.Builder(this, true);
         builder.setSurfaceView(surfaceView);
-        builder.setScaleType(MediaPlayer.ScaleType.SURFACE_FIT_SCREEN);
+        //builder.setScaleType(MediaPlayer.ScaleType.SURFACE_FIT_SCREEN);
         builder.useNoCache();
         builder.useFullScreen();
         vlcVideoLibrary = builder.create();
-        vlcVideoLibrary.setPlayUrl("rtsp://192.168.31.168/0");
+        //vlcVideoLibrary.setPlayUrl("rtsp://192.168.31.168/0");
+        vlcVideoLibrary.setPlayUrl("rtsp://192.168.31.192:1234");
         // vlcVideoLibrary.setPlayUrl("file://"+Environment.getExternalStorageDirectory()+"/mfw.mp4");
         //vlcVideoLibrary.getPlayer().setVideoTrackEnabled(false);
         vlcVideoLibrary.setVlcVout();
