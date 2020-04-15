@@ -9,6 +9,8 @@ import android.view.SurfaceView;
 import com.mafanwei.vlclibrary.VlcListener;
 import com.mafanwei.vlclibrary.VlcVideoLibrary;
 
+import org.videolan.libvlc.MediaPlayer;
+
 public class MainActivity extends AppCompatActivity {
 
     private SurfaceView surfaceView;
@@ -38,19 +40,23 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onBuffering");
             }
         });
-        //builder.setScaleType(MediaPlayer.ScaleType.SURFACE_FILL);
-        //  builder.setHeight(1920);
-        //  builder.setWidth(1080);
+       // builder.addOption("--vout=android-display");
+        //builder.setScaleType(MediaPlayer.ScaleType.SURFACE_FIT_SCREEN);
+          builder.setHeight(1920);
+          builder.setWidth(1080);
         //builder.setHeight(3024);
-        //  builder.setAutoSize(false);
-        // builder.addOption(":network-caching=0");
-        //  builder.addOption(":file-caching=0");
+          builder.setAutoSize(false);
+          builder.addOption(":network-caching=0");
+          builder.addOption(":file-caching=0");
         //  builder.addOption("--rotate-angle=180");
         // builder.addOption("--gradient-mode=edge");
         vlcVideoLibrary = builder.create();
+       // vlcVideoLibrary.setPlayUrl("rtsp://192.168.31.168/0");
         //vlcVideoLibrary.playFile(Environment.getExternalStorageDirectory()+"/mfw.mp4");
-        vlcVideoLibrary.setPlayUrl("rtsp://192.168.31.168/0");
-        //vlcVideoLibrary.setPlayUrl("rtp://192.168.31.83:1234");
+        vlcVideoLibrary.setPlayUrl("rtsp://192.168.31.192:1234");
+        vlcVideoLibrary.getPlayer().setVideoTrackEnabled(false);
+        //vlcVideoLibrary.getPlayer().setAudioDelay(150000);
+        vlcVideoLibrary.setvlcVout();
         // vlcVideoLibrary.setPlayUrl("file://"+Environment.getExternalStorageDirectory()+"/mfw.mp4");
     }
 

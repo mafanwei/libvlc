@@ -42,14 +42,16 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
     public void setPlayUrl(String endPoint) {
         if (player == null || player.isReleased()) {
             setMedia(new Media(vlcInstance, Uri.parse(endPoint)));
-            setVout();
         }
+    }
+
+    public void setvlcVout() {
+        setVout();
     }
 
     public void setPlayFile(String file) {
         if (player == null || player.isReleased()) {
             setMedia(new Media(vlcInstance, file));
-            setVout();
         }
     }
 
@@ -120,6 +122,9 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
         //media.addOption(":file-caching=" + Constants.BUFFER);
         media.setHWDecoderEnabled(true, false);
         player = new MediaPlayer(vlcInstance);
+        for(String option : options) {
+            media.addOption(option);
+        }
         player.setMedia(media);
         player.setEventListener(this);
         player.setVideoScale(scaleType);
@@ -218,11 +223,7 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
                 throw new NullPointerException("vlcListener shouldn't be null");
             }
             if(vlcVideoLibrary.vlcInstance == null) {
-                if (vlcVideoLibrary.options == null) {
                     vlcVideoLibrary.vlcInstance = new LibVLC(context, new VlcOptions().getDefaultOptions());
-                } else {
-                    vlcVideoLibrary.vlcInstance = new LibVLC(context, vlcVideoLibrary.options);
-                }
             }
             context = null;
             return vlcVideoLibrary;
