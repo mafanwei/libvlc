@@ -83,7 +83,9 @@ public class VlcVideoLibrary implements MediaPlayer.EventListener {
 
     public void resumePlay() {
         if (player != null && player.hasMedia() && !player.isPlaying()) {
-            setVout();
+            if(!vlcOut.areViewsAttached()) {
+                setVout();
+            }
             player.play();
         }
     }

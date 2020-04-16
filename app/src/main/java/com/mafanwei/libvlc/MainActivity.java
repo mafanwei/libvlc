@@ -3,6 +3,7 @@ package com.mafanwei.libvlc;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.SurfaceView;
 
 import com.mafanwei.vlcLibrary.VlcVideoLibrary;
@@ -29,8 +30,8 @@ public class MainActivity extends Activity {
         builder.useFullScreen();
         vlcVideoLibrary = builder.create();
         //vlcVideoLibrary.setPlayUrl("rtsp://192.168.31.168/0");
-        vlcVideoLibrary.setPlayUrl("rtsp://192.168.31.192:1234");
-        // vlcVideoLibrary.setPlayUrl("file://"+Environment.getExternalStorageDirectory()+"/mfw.mp4");
+        //vlcVideoLibrary.setPlayUrl("rtsp://192.168.31.192:1234");
+         vlcVideoLibrary.setPlayUrl("file://"+ Environment.getExternalStorageDirectory()+"/mfw.mp4");
         //vlcVideoLibrary.getPlayer().setVideoTrackEnabled(false);
         vlcVideoLibrary.setVlcVout();
     }
