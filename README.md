@@ -7,6 +7,7 @@ Lastest：[![](https://jitpack.io/v/mafanwei/libvlc.svg)](https://jitpack.io/#ma
 Build with libvlc：3.2.5
 
 ## Quick Start
+[中文介绍](https://blog.csdn.net/qwe25878/article/details/105579760)
 
 **1.** Add library to your project:
 
@@ -31,7 +32,8 @@ dependencies {
 Use ``` VlcVideoLibrary.Builder``` to build VlcVideoLibrary.
 And use ```VlcVideoLibrary``` to play.
 
-```VlcVideoLibrary.Builder builder = new VlcVideoLibrary.Builder(this, true);
+```
+VlcVideoLibrary.Builder builder = new VlcVideoLibrary.Builder(this, true);
 //set a render object: Surface/SurfaceView/TextureView/SurfaceTexture
 builder.setSurfaceView(surfaceView);
 //create VlcVideoLibrary.
